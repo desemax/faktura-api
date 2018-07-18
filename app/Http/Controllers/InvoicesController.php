@@ -2,12 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Traits\ResponsesTrait;
 use App\Invoice;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 
 class InvoicesController extends Controller
 {
+    use ResponsesTrait;
+
     /**
      * @return \Illuminate\Http\JsonResponse
      */
@@ -15,20 +17,14 @@ class InvoicesController extends Controller
     {
         $invoices = Invoice::all();
 
-        return response()->json([
-            'status' => 'success',
-            'data'=> [compact('invoices')],
-        ]);
+        return $this->success(['invoices' => $invoices]);
     }
 
     public function show($id)
     {
         $invoice = Invoice::findOrFail($id);
 
-        return response()->json([
-            'status' => 'success',
-            'data'=> [compact('invoice')],
-        ]);
+        return $this->success(['invoice' => $invoice]);
     }
 
     public function store(Request $request)
@@ -37,10 +33,7 @@ class InvoicesController extends Controller
         $invoice->fill($request->all());
         $invoice->save();
 
-        return response()->json([
-            'status' => 'success',
-            'data'=> [compact('invoice')],
-        ]);
+        return $this->success(['invoice' => $invoice]);
     }
 
     public function update($id, Request $request)
@@ -48,10 +41,7 @@ class InvoicesController extends Controller
         $invoice = Invoice::findOrFail($id);
         $invoice->update($request->all());
 
-        return response()->json([
-            'status' => 'success',
-            'data'=> [compact('invoice')],
-        ]);
+        return $this->success(['invoice' => $invoice], 201);
     }
 
     public function delete($id)
@@ -59,10 +49,6 @@ class InvoicesController extends Controller
         $invoice = Invoice::findOrFail($id);
         $invoice->delete();
 
-        return response()->json([
-            'status' => 'success',
-        ]);
+        return $this->success([], 201);
     }
-
-    //
 }
