@@ -22,6 +22,7 @@ $router->get('/', function () use ($router) {
 $router->group([
     // 'middleware' => 'auth',
     'prefix' => 'api/v1',
+    'middleware' => \Barryvdh\Cors\HandleCors::class,
 ], function () use ($router) {
 
     $router->get('/invoices', 'InvoicesController@index');
